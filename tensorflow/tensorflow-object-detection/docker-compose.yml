@@ -1,0 +1,30 @@
+version: '2'
+services:
+  jupyter:
+    build: .
+    container_name: jupyter_api
+    ports:
+      - "8888:8888"
+    environment:
+      - PASSWORD=tensorflow
+    volumes:
+      - "/tmp/tensorflow_logs"
+      - "./notebooks:/root/notebooks"
+      - "./models:/root/models"
+    command:
+      - "/run_jupyter.sh"
+      - "/root/notebooks"
+      - "--allow-root"
+  tensorboard:
+    build: .
+    container_name: tensorboard_api
+    ports:
+      - "6006:6006"
+    volumes_from:
+      - jupyter
+    command:
+      - "tensorboard"
+      - "--logdir"
+      - "/tmp/tensorflow_logs"
+      - "--host"
+      - "0.0.0.0"
