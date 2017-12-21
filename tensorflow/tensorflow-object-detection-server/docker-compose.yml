@@ -1,0 +1,14 @@
+version: '2'
+services:
+  object-detection:
+    build: .
+    container_name: object-server
+    ports:
+      - "9999:80"
+    volumes:
+      - "./servers:/root/servers"
+      - "./models:/root/models"
+      - "/tmp/tensorflow_logs"
+    command:
+      - "python"
+      - "/root/servers/server.py"
