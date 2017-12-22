@@ -51,6 +51,7 @@ class ObjectDetetion(object):
                                                                     use_display_name=True)
         self.category_index = label_map_util.create_category_index(categories)
         self.detection_graph = detection_graph
+        self.sess = None
 
     @staticmethod
     def load_image_into_numpy_array(image):
@@ -59,39 +60,39 @@ class ObjectDetetion(object):
             (im_height, im_width, 3)).astype(np.uint8)
 
     def api(self, image):
-        detection_graph = self.detection_graph
-        with detection_graph.as_default():
-            with tf.Session(graph=detection_graph) as sess:
-                # Definite input and output Tensors for detection_graph
-                image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-                # Each box represents a part of the image where a particular object was detected.
-                detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-                # Each score represent how level of confidence for each of the objects.
-                # Score is shown on the result image, together with the class label.
-                detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
-                detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
-                num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+        if self.sess is None:
+            self.sess = tf.Session(graph=self.detection_graph)
+            detection_graph = self.detection_graph
+            # Definite input and output Tensors for detection_graph
+            self.image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
+            # Each box represents a part of the image where a particular object was detected.
+            self.detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
+            # Each score represent how level of confidence for each of the objects.
+            # Score is shown on the result image, together with the class label.
+            self.detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
+            self.detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
+            self.num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
-                # the array based representation of the image will be used later in order to prepare the
-                # result image with boxes and labels on it.
-                image_np = self.load_image_into_numpy_array(image)
-                # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-                image_np_expanded = np.expand_dims(image_np, axis=0)
-                # Actual detection.
-                (boxes, scores, classes, num) = sess.run(
-                    [detection_boxes, detection_scores, detection_classes, num_detections],
-                    feed_dict={image_tensor: image_np_expanded})
-                # Visualization of the results of a detection.
-                vis_util.visualize_boxes_and_labels_on_image_array(
-                    image_np,
-                    np.squeeze(boxes),
-                    np.squeeze(classes).astype(np.int32),
-                    np.squeeze(scores),
-                    self.category_index,
-                    use_normalized_coordinates=True,
-                    line_thickness=8)
+        # the array based representation of the image will be used later in order to prepare the
+        # result image with boxes and labels on it.
+        image_np = self.load_image_into_numpy_array(image)
+        # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
+        image_np_expanded = np.expand_dims(image_np, axis=0)
+        # Actual detection.
+        (boxes, scores, classes, num) = self.sess.run(
+            [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
+            feed_dict={self.image_tensor: image_np_expanded})
+        # Visualization of the results of a detection.
+        vis_util.visualize_boxes_and_labels_on_image_array(
+            image_np,
+            np.squeeze(boxes),
+            np.squeeze(classes).astype(np.int32),
+            np.squeeze(scores),
+            self.category_index,
+            use_normalized_coordinates=True,
+            line_thickness=8)
 
-                return image_np
+        return image_np
 
 
 def create_guid():
@@ -102,7 +103,7 @@ def get_md5(string):
     import hashlib
     hash_md5 = hashlib.md5(string.encode('utf-8'))
     return hash_md5.hexdigest()
-    
+
 
 # 实例化Flask服务器
 app = Flask(__name__)
@@ -141,6 +142,9 @@ def save_image(image_np):
         return "XXXX", 404
 
 
+api_obj = ObjectDetetion()
+
+
 @app.route("/api", methods=["POST", 'GET'])
 def search_image():
     url = request.args.get("url") or request.form.get("url")
@@ -151,8 +155,7 @@ def search_image():
             tmp_file_name = create_guid() + ".jpg"
             UrlToImageFile().save_file(url, tmp_file_name)
             image = Image.open(tmp_file_name)
-            api = ObjectDetetion()
-            image_np = api.api(image)
+            image_np = api_obj.api(image)
             return save_image(image_np)
         except Exception as e:
             print(e)
@@ -166,4 +169,3 @@ def search_image():
 ################################################################
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=False)
-
