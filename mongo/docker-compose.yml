@@ -1,0 +1,9 @@
+version: '2'
+services:
+  mongodb:
+    image: mongo:3.2-jessie
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - "/home/frkhit/lib/mongodb:/data/db"
