@@ -1,0 +1,5 @@
+version: '2'
+services:
+  tensorflow-ml-env:
+    build: .
+    container_name: tensorflow-ml-env
