@@ -1,0 +1,11 @@
+version: '2'
+services:
+  mysql-server:
+    image: mysql:5.7
+    container_name: mysql-server
+    restart: always
+    ports:
+     - "3306:3306"
+    volumes:
+      - "/var/lib/mysql:/var/lib/mysql"
+    env_file: .env
