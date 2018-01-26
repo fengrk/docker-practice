@@ -1,8 +1,8 @@
 version: '2'
 services:
   jupyter:
-    image: tensorflow/tensorflow:1.4.1-gpu-py3
-    container_name: jupyter
+    build: .
+    container_name: jupyter_api
     ports:
       - "80:8888"
     environment:
@@ -10,13 +10,14 @@ services:
     volumes:
       - "/tmp/tensorflow_logs"
       - "./notebooks:/root/notebooks"
+      - "/home/ubuntu/allcodes:/root/allcodes"
     command:
       - "/run_jupyter.sh"
       - "/root/notebooks"
       - "--allow-root"
   tensorboard:
-    image: tensorflow/tensorflow:1.4.1-gpu-py3
-    container_name: tensorboard
+    build: .
+    container_name: tensorboard_api
     ports:
       - "6006:6006"
     volumes_from:
