@@ -8,6 +8,7 @@ services:
     environment:
       - PASSWORD=tensorflow
     volumes:
+      - "/tmp:/tmp"
       - "/tmp/tensorflow_logs"
       - "./notebooks:/root/notebooks"
       - "/home/ubuntu/allcodes:/root/allcodes"
