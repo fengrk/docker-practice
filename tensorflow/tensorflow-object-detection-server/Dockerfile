@@ -1,10 +1,9 @@
 from tensorflow/tensorflow:1.4.0-py3
 
-RUN echo "/root/models/research/" | tee /usr/local/lib/python3.5/dist-packages/research.pth \
-   && echo "/root/models/research/slim" | tee /usr/local/lib/python3.5/dist-packages/slim.pth \
-   && pip install flask
-RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/' /etc/apt/sources.list \
-    && apt-get update \
-    &&  apt-get -y install python3-tk
-
-RUN pip install requests 
+RUN apt-get update && \
+   apt-get -y install python3-tk git protobuf-compiler && \
+   git clone https://github.com/tensorflow/models /tensorflow/models && \
+   echo "/tensorflow/models/research/" | tee /usr/local/lib/python3.5/dist-packages/research.pth  && \
+   echo "/tensorflow/models/research/slim" | tee /usr/local/lib/python3.5/dist-packages/slim.pth && \
+   cd /tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=. && \
+   pip install flask requests
