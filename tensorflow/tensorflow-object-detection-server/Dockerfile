@@ -11,5 +11,12 @@ RUN apt-get update && \
    mv protoc3/bin/* /usr/local/bin/ && mv protoc3/include/* /usr/local/include/ && rm -rf protoc3/ && \
    cd /tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=. && \
    pip install flask requests && \
+   cd / && curl -OL http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz && \
+   tar -xzvf ssd_mobilenet_v2_coco_2018_03_29.tar.gz && mv ssd_mobilenet_v2_coco_2018_03_29 data && \
+   rm ssd_mobilenet_v2_coco_2018_03_29.tar.gz && \
    rm -rf /var/lib/apt/lists/* && \
    rm -rf /root/.cache/pip/*
+COPY server.py /notebooks/server.py
+WORKDIR /notebooks
+ENTRYPOINT ["python"]
+CMD ["-c", "server.py"]
