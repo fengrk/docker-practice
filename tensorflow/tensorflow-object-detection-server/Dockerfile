@@ -16,7 +16,4 @@ RUN apt-get update && \
    rm ssd_mobilenet_v2_coco_2018_03_29.tar.gz && \
    rm -rf /var/lib/apt/lists/* && \
    rm -rf /root/.cache/pip/*
-COPY server.py /notebooks/server.py
-WORKDIR /notebooks
-ENTRYPOINT ["python"]
-CMD ["-c", "server.py"]
+
