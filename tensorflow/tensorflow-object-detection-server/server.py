@@ -16,7 +16,7 @@ class ObjectDetetion(object):
     PATH_TO_CKPT = '/data/frozen_inference_graph.pb'
 
     # List of the strings that is used to add correct label for each box.
-    PATH_TO_LABELS = '/tensorflow/models/research/object_detection/data/mscoco_label_map.pbtxt'
+    PATH_TO_LABELS = '/pylibs/ml_tools/object_detection/data/mscoco_label_map.pbtxt'
 
     NUM_CLASSES = 90
 
