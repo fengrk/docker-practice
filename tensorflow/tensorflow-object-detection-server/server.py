@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
+# coding:utf-8
 
 from io import BytesIO
 
@@ -111,7 +110,7 @@ def search_image():
 
 
 ################################################################
-# server测试
+# server
 ################################################################
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=False)
