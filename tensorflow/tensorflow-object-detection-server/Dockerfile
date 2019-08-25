@@ -15,4 +15,6 @@ RUN apt-get update && \
 
 COPY server.py /app/server.py
 WORKDIR /app
+ENTRYPOINT ["python"]
+CMD ["-u", "server.py"]
 
