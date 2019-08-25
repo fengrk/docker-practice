@@ -3,7 +3,7 @@ from frkhit/docker-python:3.6
 RUN apt-get update && \
    apt-get -y install python3-tk && \
    pip install flask requests tensorflow==1.14.0 pyxtools pymltools && \
-   echo "/pylibs" | tee /usr/local/lib/python3.6/dist-packages/pylibs.pth  && \
+   echo "/pylibs" | tee /usr/local/lib/python3.6/site-packages/pylibs.pth  && \
    cd / && curl -OL http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz && \
    tar -xzvf ssd_mobilenet_v2_coco_2018_03_29.tar.gz && mv ssd_mobilenet_v2_coco_2018_03_29 data && \
    rm ssd_mobilenet_v2_coco_2018_03_29.tar.gz && \
