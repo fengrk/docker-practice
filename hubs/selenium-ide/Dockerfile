@@ -8,6 +8,6 @@ RUN		apt update && apt install -y curl git vim gnupg2 && \
 		echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
 		git clone https://github.com/SeleniumHQ/selenium-ide && \
 		apt update && apt install -y yarn  && \ 
-		cd /code/selenium-ide && yarn && yarn build && yarn watch && \
+		cd /code/selenium-ide && yarn && yarn build && \
 		rm -rf /var/lib/apt/lists/*
 
