@@ -2,7 +2,7 @@
 __author__ = 'rk.feng'
 
 import json
-
+import random
 import grpc
 
 import jieba_service_pb2
@@ -27,14 +27,27 @@ def run():
     channel = grpc.insecure_channel('jieba:10000')
 
     # 调用 rpc 服务
-    seg_list = jieba_cut(
-        rpc_channel=channel,
-        sentence="今天天气很好",
-        use_paddle=False,
-        cut_all=True,
-    )
+    count = 0
+    flag = random.randint(5, 20)
+    seg_list = None
+    with open("/data.txt", "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
 
-    print("jieba client received: {}".format(seg_list))
+            seg_list = jieba_cut(
+                rpc_channel=channel,
+                sentence=line,
+                use_paddle=False,
+                cut_all=True,
+            )
+            count += 1
+            if count % flag == 0:
+                print("result is {}".format(seg_list))
+
+    if seg_list:
+        print("result is {}".format(seg_list))
 
 
 if __name__ == '__main__':

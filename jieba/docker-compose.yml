@@ -5,8 +5,6 @@ services:
             context: jieba
             dockerfile: Dockerfile
         image: t/jieba
-        ports:
-            - 10000:10000
         volumes:
             - ./jieba:/app
         command: ["python3", "jieba_server.py"]
@@ -19,11 +17,11 @@ services:
             dockerfile: Dockerfile
         image: t/jieba
         volumes:
-#            - ./test/data.txt:/data.txt
+            - ./test/data.txt:/data.txt
             - ./jieba:/app
         depends_on:
             - jieba
-        command: ["python3", "jieba_client.py", "--url", "jieba:10000"]
+        command: ["python3", "jieba_client.py"]
         networks:
             - jieba-network
 
