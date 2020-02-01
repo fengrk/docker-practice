@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+    jieba:
+        build:
+            context: jieba
+            dockerfile: Dockerfile
+        image: t/jieba
+        ports:
+            - 10000:10000
+        volumes:
+            - ./jieba:/app
+        command: ["python3", "jieba_server.py"]
+        networks:
+            - jieba-network
+    
+    jieba-test:
+        build:
+            context: jieba
+            dockerfile: Dockerfile
+        image: t/jieba
+        volumes:
+#            - ./test/data.txt:/data.txt
+            - ./jieba:/app
+        depends_on:
+            - jieba
+        command: ["python3", "jieba_client.py", "--url", "jieba:10000"]
+        networks:
+            - jieba-network
+
+networks:
+    jieba-network:
+        driver: bridge

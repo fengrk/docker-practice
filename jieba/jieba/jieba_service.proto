@@ -1,0 +1,17 @@
+// jieba_service.proto
+syntax = "proto3";
+
+service JiebaService {
+    rpc cut(CutRequest) returns (CutReply) {}
+}
+
+message CutRequest {
+    string sentence = 1;
+    bool  cut_all = 2;
+    bool  HMM = 3;
+    bool  use_paddle = 4;
+}
+
+message CutReply {
+    string seg_list = 1;
+}
