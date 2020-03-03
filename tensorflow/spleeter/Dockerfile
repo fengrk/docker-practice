@@ -14,9 +14,3 @@ RUN mkdir -p /model/4stems && \
     tar -xvzf /tmp/4stems.tar.gz -C /model/4stems/ && \
     touch /model/4stems/.probe && \
     rm -f /tmp/*.tar.gz
-
-# install grpc
-RUN apt-get update && \
-    pip3 install jieba grpcio grpcio-tools && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /root/.cache/pip/*
