@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+    py-server:
+        image: python:3.7.6-alpine
+        hostname: server-${SERVER_INDEX}
+        command: ["python", "-u", "python_worker.py"]
+        working_dir: /app
+        restart: always
+        volumes:
+            - ./:/app
+        environment:
+            TZ: Asia/Shanghai
