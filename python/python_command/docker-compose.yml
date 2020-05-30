@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+    py-cmd:
+        image: python:3.7.6-alpine
+        container_name: py-cmd
+        entrypoint: /bin/sh
+        command: ["-c", "chmod +x cmd.sh; ./cmd.sh "]
+        working_dir: /app
+        volumes:
+            - ./:/app
+        environment:
+            - TZ=Asia/Shanghai
+            - PYTHONUNBUFFERED=1
