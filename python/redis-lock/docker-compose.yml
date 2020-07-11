@@ -1,0 +1,39 @@
+version: '3.5'
+
+networks:
+    network-lock:
+        driver: bridge
+
+volumes:
+    data-redis:
+
+services:
+    redis-stream:
+        image: redis:5.0.7-buster
+        container_name: redis-stream
+        hostname: redis-stream
+        restart: always
+        ports:
+            - "127.0.0.1:6379:6379"
+        command: ["redis-server", "--appendonly", "yes"]
+        volumes:
+            - data-redis:/data
+        networks:
+            - network-lock
+            
+    py-server:
+        build: .
+        image: python:3.7.6-alpine-redis
+        hostname: server-${SERVER_INDEX}
+        command: ["python", "-u", "python_worker.py"]
+        working_dir: /app
+        depends_on:
+          - redis-stream
+        restart: always
+        volumes:
+            - ./:/app
+        environment:
+            TZ: Asia/Shanghai
+        networks:
+            - network-lock
+            
