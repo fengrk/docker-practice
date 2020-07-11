@@ -1,7 +1,5 @@
 *.code-workspace
 */__pycache__
 *.pyc
-.idea/ 
-*.py
 *.log
 
