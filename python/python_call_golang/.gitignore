@@ -1,0 +1,7 @@
+*.code-workspace
+*/__pycache__
+*.pyc
+*.log
+
+go_api.h
+go_api.so
